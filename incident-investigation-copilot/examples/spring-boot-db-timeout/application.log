@@ -1,0 +1,6 @@
+2026-10-19 10:15:01 INFO  OrderService - Processing order 10234
+2026-10-19 10:15:02 WARN  HikariPool - Connection pool nearing maximum capacity
+2026-10-19 10:15:05 ERROR OrderRepository - SQL query timed out after configured query timeout
+2026-10-19 10:15:08 ERROR OrderController - Failed to process order 10235
+2026-10-19 10:15:10 WARN  HikariPool - Connection acquisition timeout
+2026-10-19 10:15:15 ERROR OrderService - Order processing failed
