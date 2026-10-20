@@ -59,3 +59,31 @@ incident-investigation-copilot/
 │   ├── architecture.md
 │   └── demo-script.md
 └── README.md
+
+
+```
+
+incident-investigation-copilot/
+├── .github/
+│   ├── copilot-instructions.md
+│   └── prompts/
+│       └── investigate-incident.prompt.md
+├── examples/
+│   ├── spring-boot-db-timeout/
+│   │   ├── incident.md
+│   │   ├── application.log
+│   │   └── deployment.md
+│   ├── kubernetes-crashloop/
+│   │   └── incident.md
+│   └── airflow-task-failure/
+│       └── incident.md
+├── templates/
+│   └── incident-report.md
+├── evaluation/
+│   ├── test-scenarios.md
+│   └── results.md
+├── submission/
+│   ├── architecture.md
+│   └── demo-script.md
+└── README.md
+```
