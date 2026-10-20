@@ -1,45 +1,62 @@
+
 ---
 name: investigate-incident
-description: Analyze supplied incident evidence and create an evidence-based investigation report.
-agent: ask
+description: Read incident evidence from the workspace and generate an evidence-based investigation report.
+agent: agent
 ---
 
-Investigate the incident using the evidence the user identifies or files available in the current workspace. Follow `.github/copilot-instructions.md` and use `templates/incident-report.md` as the report structure.
+# Incident Investigation
 
-Do not assume you can access live logs, dashboards, deployment systems, or production infrastructure. Analyze only evidence actually provided or available in the workspace.
+The user's message contains the incident directory path.
 
-## Workflow
+Example:
+`/investigate-incident examples/spring-boot-db-timeout`
 
-1. **Summarize:** State the affected component, observed symptoms, known impact, and what is unknown.
-2. **Timeline:** Extract events in timestamp order. Preserve the source of each event and call out missing timezone or clock information.
-3. **Evidence:** List the most relevant log lines, stack traces, code, configuration, or deployment facts. Quote only the minimum necessary.
-4. **Hypotheses:** Rank plausible explanations. For each, state:
-   - hypothesis;
-   - supporting evidence;
-   - contradicting evidence or evidence not yet available;
-   - confidence (low, medium, or high) with a reason;
-   - the next check that would confirm or reject it.
-5. **Diagnostics:** Suggest targeted checks that distinguish between hypotheses. Prefer read-only commands or queries, and explain what the results would mean. Do not invent results.
-6. **Mitigation and remediation:** Separate immediate mitigation from permanent correction. Include risks and validation steps. Do not recommend a change as certain when the cause is unconfirmed.
-7. **Missing evidence:** Prioritize the smallest set of missing facts likely to reduce uncertainty.
-8. **Report:** Create a concise report using `templates/incident-report.md`.
+## Mandatory procedure
 
-## Technology-specific guidance
+1. Resolve the supplied path relative to the current workspace root.
+2. Use available workspace tools to list the directory and recursively discover its files.
+3. If workspace tools cannot list files, use the terminal to verify the workspace root and directory.
+4. Read these files when present:
+   - `incident.md`
+   - `application.log`
+   - `deployment.md`
+5. Read any other relevant text files discovered in the incident directory.
+6. If a path is not found, verify the workspace root before concluding that the files are missing.
+7. Never invent file contents or claim to have read files that were not accessible.
+8. If the folder cannot be accessed, explain the exact path and access failure. Do not generate a fabricated investigation.
 
-Apply only what fits the incident:
-- **Spring Boot / Java:** inspect exception chains, request latency, thread pools, connection-pool metrics, timeouts, dependency health, and recent changes when evidence supports it.
-- **Python:** inspect tracebacks, dependency errors, retries, resource exhaustion, and relevant runtime/configuration.
-- **PostgreSQL:** consider active sessions, long-running transactions, locks/waits, query plans, connection usage, and resource metrics. Do not assert a database issue without evidence.
-- **Kubernetes:** consider pod events, previous container logs, restart counts, probes, resource limits, image/config changes, and scheduling events.
-- **Docker:** consider container exit status, startup logs, health checks, resource constraints, and configuration.
-- **Terraform:** review relevant plan/configuration changes and provider errors. Never apply changes as part of the investigation.
-- **Airflow:** inspect task state, task logs, dependencies, retries, schedules, and upstream inputs.
-- **Dataflow / BigQuery:** consider job/task errors, schema changes, data volume, query/job metadata, permissions, and data-quality checks.
-- **React:** distinguish browser/client errors from API failures; check console/network evidence and recent frontend changes.
+## Analyze the evidence
 
-## Required discipline
+Separate observed facts from hypotheses.
 
-- Do not treat correlation as causation.
-- Do not infer that a deployment occurred unless evidence says so.
-- If the evidence is insufficient, conclude **Undetermined** and state the next best checks.
-- Do not execute commands or modify production systems.
+- Build a timestamped timeline from the actual logs.
+- Identify the observed symptoms and known impact.
+- Consider database query latency, connection-pool exhaustion, database availability, and recent deployment changes only where relevant.
+- For each hypothesis, give supporting evidence, missing or contradicting evidence, confidence, and a diagnostic check.
+- Do not claim a confirmed root cause without sufficient evidence.
+- Use `UNKNOWN` when the incident state cannot be established from available evidence.
+
+## Generate the report
+
+Read `templates/incident-report.md` and follow its structure.
+
+Create or update `results.md` inside the supplied incident directory.
+
+Include:
+- Status
+- Summary and impact
+- Timeline
+- Evidence with source file paths
+- Ranked root-cause hypotheses
+- Recommended diagnostic checks
+- Missing evidence
+- Files actually inspected
+
+Preserve source evidence. Do not modify application logs, deployment records, or incident metadata.
+
+Use available file-writing tools to save the report. Confirm success only after the write operation succeeds.
+
+## Final response
+
+Report the resulting status, strongest evidence, likely causes, and the path to the generated report. Explicitly state any access or write failures.
