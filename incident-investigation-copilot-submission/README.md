@@ -87,3 +87,6 @@ incident-investigation-copilot/
 │   └── demo-script.md
 └── README.md
 ```
+
+
+/investigate-incident examples/spring-boot-db-timeout
