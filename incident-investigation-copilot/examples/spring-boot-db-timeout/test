@@ -1,0 +1,9 @@
+/investigate-incident
+
+Investigate the incident using all relevant files in:
+examples/spring-boot-db-timeout/
+
+Read incident.md, application.log, and deployment.md.
+Follow the investigation instructions in the prompt file.
+Separate confirmed facts from hypotheses, cite log evidence, recommend diagnostic checks, and clearly state whether the root cause is confirmed.
+Do not invent evidence or make production changes.
